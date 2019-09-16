@@ -1,4 +1,4 @@
-# Copyright (c) 2010-2018 Benjamin Peterson
+# Copyright (c) 2010-2019 Benjamin Peterson
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ import sys
 import types
 
 __author__ = "Benjamin Peterson <benjamin@python.org>"
-__version__ = "1.11.0"
+__version__ = "1.12.0"
 
 
 # Useful for very coarse version differentiation.
@@ -637,6 +637,7 @@ if PY3:
     import io
     StringIO = io.StringIO
     BytesIO = io.BytesIO
+    del io
     _assertCountEqual = "assertCountEqual"
     if sys.version_info[1] <= 1:
         _assertRaisesRegex = "assertRaisesRegexp"
@@ -844,6 +845,8 @@ def add_metaclass(metaclass):
                 orig_vars.pop(slots_var)
         orig_vars.pop('__dict__', None)
         orig_vars.pop('__weakref__', None)
+        if hasattr(cls, '__qualname__'):
+            orig_vars['__qualname__'] = cls.__qualname__
         return metaclass(cls.__name__, cls.__bases__, orig_vars)
     return wrapper
 
